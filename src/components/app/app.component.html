@@ -1,0 +1,80 @@
+<div class="app-container">
+  <h3>Product List</h3>
+  <div>
+    <ul class="list-group">
+      <div cdkDropList class="product-list" (cdkDropListDropped)="drop($event)">
+        @for (product of products; track product) {
+        <div class="product-box" cdkDrag>
+          <div class="col-1 thumbnail-image">
+            <img
+              src="{{ product.thumbnail }}"
+              alt=""
+              width="50px"
+              height="50px"
+            />
+          </div>
+          <div class="col-9 p-2">
+            <div class="product-title">
+              <div>{{ product.title }}</div>
+              <div class="product-rating">
+                {{ starCalculate(product?.rating ?? 1) }}
+                <img
+                  src="../../assets/star2.png"
+                  alt=""
+                  width="14px"
+                  height="14px"
+                />
+              </div>
+            </div>
+            <div class="col-12 product-description text-truncate">
+              {{ product.description }}
+            </div>
+          </div>
+          <div
+            class="col-1 product-price"
+            style="font-size: 10px; font-weight: 700"
+          >
+            <div>
+              <div class="discount">% {{ product.discountPercentage }}</div>
+              <div class="price-without-discount">
+                {{
+                  handleCalculatingPriceWithoutDiscount(
+                    product.price ?? 0,
+                    product.discountPercentage ?? 0
+                  )
+                }}
+                $
+              </div>
+            </div>
+
+            <div>{{ product.price }} $</div>
+          </div>
+        </div>
+        }
+      </div>
+    </ul>
+  </div>
+  <nav aria-label="Page navigation product">
+    <ul class="pagination">
+      <li class="page-item">
+        <a class="page-link" href="#" (click)="handleClickPrevious()"
+          >Previous</a
+        >
+      </li>
+      <ng-container
+        *ngFor="let page of [].constructor(totalPageCount); index as pageNumber"
+      >
+        <li
+          class="page-item"
+          [class.active]="pageNumber == skip"
+          (click)="handleClickPage($event, pageNumber)"
+        >
+          <a class="page-link" href="#">{{ pageNumber + 1 }}</a>
+        </li>
+      </ng-container>
+      <li class="page-item">
+        <a class="page-link" href="#" (click)="handleClickNext()">Next</a>
+      </li>
+    </ul>
+  </nav>
+</div>
